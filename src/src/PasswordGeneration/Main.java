@@ -12,8 +12,34 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        for(int i = 0; i < 10; i++) {
-            System.out.println(WordDictionary.getRandomWord());
+        String password = WordDictionary.getRandomWord();
+
+        password = checkRules(password);
+
+        System.out.println("Password: " + password);
+    }
+
+    private static String checkRules(String password){
+        if(Rules.getNumberNeeded()){
+            password = password + Rules.randomNumber();
         }
+
+        if(Rules.isSpecialCharacterNeeded()){
+            password = password + Rules.randomSpecialCharacter();
+        }
+
+        if(!Rules.checkLength(password)){
+            checkLength(password);
+        }
+        return password;
+    }
+
+    private static String checkLength(String password){
+        password = password + WordDictionary.getRandomWord();
+
+        if(!Rules.checkLength(password)){
+            checkLength(password);
+        }
+        return password;
     }
 }
