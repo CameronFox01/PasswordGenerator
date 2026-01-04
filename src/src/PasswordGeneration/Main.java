@@ -1,45 +1,37 @@
 package PasswordGeneration;
 
-import java.io.File;
 import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
         String filePath = "src/resources/words_alpha.txt";
+
         try {
-            WordDictionary.loadWords(filePath);
+            // Initialize dictionary
+            WordDictionary dictionary = new WordDictionary();
+            dictionary.loadWords(filePath);
+
+            // Configure password rules
+            PasswordConfig config = new PasswordConfig();
+            config.setMinLength(12);
+            config.setIncludeNumbers(true);
+            config.setIncludeSpecialChars(true);
+
+            // Generate password
+            PasswordGenerator generator = new PasswordGenerator(dictionary);
+            String password = generator.generate(config);
+
+            System.out.println("Password: " + password);
+            System.out.println("Length: " + password.length());
+
+            // Easy to generate multiple passwords with different configs!
+            System.out.println("\nAlternative (no special chars):");
+            config.setIncludeSpecialChars(false);
+            config.setMinLength(16);
+            System.out.println("Password: " + generator.generate(config));
+
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Error loading words: " + e.getMessage());
         }
-
-        String password = WordDictionary.getRandomWord();
-
-        password = checkRules(password);
-
-        System.out.println("Password: " + password);
-    }
-
-    private static String checkRules(String password){
-        if(Rules.getNumberNeeded()){
-            password = password + Rules.randomNumber();
-        }
-
-        if(Rules.isSpecialCharacterNeeded()){
-            password = password + Rules.randomSpecialCharacter();
-        }
-
-        if(!Rules.checkLength(password)){
-            checkLength(password);
-        }
-        return password;
-    }
-
-    private static String checkLength(String password){
-        password = password + WordDictionary.getRandomWord();
-
-        if(!Rules.checkLength(password)){
-            checkLength(password);
-        }
-        return password;
     }
 }
