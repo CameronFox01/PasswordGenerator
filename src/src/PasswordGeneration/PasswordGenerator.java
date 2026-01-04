@@ -41,6 +41,15 @@ public class PasswordGenerator {
         return password.toString();
     }
 
+    public String pinGenerate(PasswordConfig config) {
+        StringBuilder pin = new StringBuilder();
+        int i = config.getMinLength();
+        while (pin.length() < i) {
+            pin.append(generateRandomNumber());
+        }
+        return pin.toString();
+    }
+
     private String generateRandomNumber() {
         // Generate 1-4 digit number
         return String.valueOf(random.nextInt(10000));

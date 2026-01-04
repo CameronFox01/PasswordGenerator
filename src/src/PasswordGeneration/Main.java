@@ -13,22 +13,32 @@ public class Main {
 
             // Configure password rules
             PasswordConfig config = new PasswordConfig();
-            config.setMinLength(12);
+            config.setMinLength(8);
             config.setIncludeNumbers(true);
             config.setIncludeSpecialChars(true);
+            config.setLettersToNumbers(false);
+            config.setMakePinPassword(true);
 
             // Generate password
-            PasswordGenerator generator = new PasswordGenerator(dictionary);
-            String password = generator.generate(config);
+            if(!config.isMakePinPassword()) {
 
-            System.out.println("Password: " + password);
-            System.out.println("Length: " + password.length());
+                PasswordGenerator generator = new PasswordGenerator(dictionary);
+                String password = generator.generate(config);
 
-            // Easy to generate multiple passwords with different configs!
-            System.out.println("\nAlternative (no special chars):");
-            config.setIncludeSpecialChars(false);
-            config.setMinLength(16);
-            System.out.println("Password: " + generator.generate(config));
+                System.out.println("Password: " + password);
+                System.out.println("Length: " + password.length());
+
+                // Easy to generate multiple passwords with different configs!
+                System.out.println("\nAlternative (no special chars):");
+                config.setIncludeSpecialChars(false);
+                config.setMinLength(16);
+                System.out.println("Password: " + generator.generate(config));
+            } else {
+                PasswordGenerator generator = new PasswordGenerator(dictionary);
+                String password = generator.pinGenerate(config);
+                System.out.println("Pin: " + password);
+                System.out.println("Length: " + password.length());
+            }
 
         } catch (IOException e) {
             System.err.println("Error loading words: " + e.getMessage());
