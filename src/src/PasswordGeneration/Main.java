@@ -17,7 +17,8 @@ public class Main {
             config.setIncludeNumbers(true);
             config.setIncludeSpecialChars(true);
             config.setLettersToNumbers(false);
-            config.setMakePinPassword(true);
+            config.setMakePinPassword(false);
+            config.setIncludeCapitalLetter(true);
 
             // Generate password
             if(!config.isMakePinPassword()) {

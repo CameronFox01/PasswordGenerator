@@ -1,6 +1,8 @@
 package PasswordGeneration;
 
 // PasswordGenerator.java - Main generator logic
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class PasswordGenerator {
@@ -35,7 +37,11 @@ public class PasswordGenerator {
 
         // Future: Apply l33t speak transformation
         if (config.isLettersToNumbers()) {
-            return applyLeetSpeak(password.toString());
+            password = applyLeetSpeak(password.toString());
+        }
+
+        if (config.isIncludeCapitalLetter()){
+            password = makeLetterCapital(password.toString());
         }
 
         return password.toString();
@@ -50,6 +56,28 @@ public class PasswordGenerator {
         return pin.toString();
     }
 
+    private StringBuilder makeLetterCapital(String password) {
+        // Find all letter positions first
+        List<Integer> letterPositions = new ArrayList<>();
+        for (int i = 0; i < password.length(); i++) {
+            char c = password.charAt(i);
+            if (c >= 'a' && c <= 'z') {
+                letterPositions.add(i);
+            }
+        }
+
+        // If no lowercase letters, return as-is
+        if (letterPositions.isEmpty()) {
+            return new StringBuilder(password);
+        }
+
+        // Pick a random letter position
+        int pos = letterPositions.get(random.nextInt(letterPositions.size()));
+        char capitalChar = Character.toUpperCase(password.charAt(pos));
+
+        return new StringBuilder(password.substring(0, pos) + capitalChar + password.substring(pos + 1));
+    }
+
     private String generateRandomNumber() {
         // Generate 1-4 digit number
         return String.valueOf(random.nextInt(10000));
@@ -61,13 +89,13 @@ public class PasswordGenerator {
         return String.valueOf((char) code);
     }
 
-    private String applyLeetSpeak(String text) {
+    private StringBuilder applyLeetSpeak(String text) {
         // Future implementation: a->4, e->3, i->1, o->0, s->5, t->7
-        return text.replace('a', '4')
+        return new StringBuilder(text.replace('a', '4')
                 .replace('e', '3')
                 .replace('i', '1')
                 .replace('o', '0')
                 .replace('s', '5')
-                .replace('t', '7');
+                .replace('t', '7'));
     }
 }
