@@ -10,6 +10,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -18,7 +19,7 @@ import javafx.stage.Stage;
  * Tie this in without using anything from Main in the Password Generation.
  * This will allow me to have a terminal version and a UI version.
  */
-public class UI extends Application {
+public class PasswordGeneratorUI extends Application {
 
     public static void main(String[] args) {
         launch(args);
@@ -38,12 +39,35 @@ public class UI extends Application {
         title.setAlignment(Pos.TOP_CENTER);
         title.setStyle("-fx-font-size: 40px;");
 
+        // Create toggle switches for password options
+        HBox numbersRow = new HBox(10);
+        Label numbersLabel = new Label("Include Numbers:");
+        ToggleSwitch numbersToggle = new ToggleSwitch();
+        numbersToggle.setSwitchedOn(true);
+        numbersRow.getChildren().addAll(numbersLabel, numbersToggle);
+
+        HBox specialCharsRow = new HBox(10);
+        Label specialCharsLabel = new Label("Include Special Characters:");
+        ToggleSwitch specialCharsToggle = new ToggleSwitch();
+        specialCharsToggle.setSwitchedOn(true);
+        specialCharsRow.getChildren().addAll(specialCharsLabel, specialCharsToggle);
+
+        HBox leetSpeakRow = new HBox(10);
+        Label leetSpeakLabel = new Label("Use Leet Speak:");
+        ToggleSwitch leetSpeakToggle = new ToggleSwitch();
+        leetSpeakRow.getChildren().addAll(leetSpeakLabel, leetSpeakToggle);
+
+
         // Button to Generate a Password
         Button generateButton = new Button("Generate");
         generateButton.setStyle("-fx-font-size: 40px;");
         generateButton.setOnAction(e -> {
 
             PasswordGenerator generator = new PasswordGenerator(dictionary);
+            config.setIncludeNumbers(numbersToggle.isSwitchedOn());
+            config.setIncludeSpecialChars(specialCharsToggle.isSwitchedOn());
+            config.setLettersToNumbers(leetSpeakToggle.isSwitchedOn());
+
             String password = generator.generate(config);
             System.out.println(password);
         });
@@ -51,7 +75,7 @@ public class UI extends Application {
         VBox root = new VBox();
         root.setAlignment(Pos.CENTER);
         root.setSpacing(10);
-        root.getChildren().addAll(title, generateButton);
+        root.getChildren().addAll(title, numbersRow, specialCharsRow, leetSpeakRow, generateButton);
 
         Scene scene = new Scene(root);
         Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
