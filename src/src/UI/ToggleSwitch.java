@@ -14,8 +14,8 @@ import javafx.util.Duration;
 public class ToggleSwitch extends Pane {
     private final BooleanProperty switchedOn = new SimpleBooleanProperty(false);
     private final TranslateTransition animation = new TranslateTransition(Duration.millis(200));
-    private Rectangle background = null;
-    private Circle trigger = null;
+    private Rectangle background;
+    private Circle trigger;
 
     public ToggleSwitch() {
         // Background track
