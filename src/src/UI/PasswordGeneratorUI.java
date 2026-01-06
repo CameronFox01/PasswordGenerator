@@ -10,6 +10,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
@@ -38,6 +39,14 @@ public class PasswordGeneratorUI extends Application {
         Label title = new Label("Generate a Password");
         title.setAlignment(Pos.TOP_CENTER);
         title.setStyle("-fx-font-size: 40px;");
+
+        // Section for changing the number of the length required for password
+        HBox lengthRow = new HBox(10);
+        Label lengthLabel = new Label("Length:");
+        TextField lengthField = new TextField();
+        lengthField.setText(String.valueOf(config.getMinLength()));
+        lengthField.setMaxWidth(30);
+        lengthRow.getChildren().addAll(lengthLabel, lengthField);
 
         // Create toggle switches for password options
         HBox numbersRow = new HBox(10);
@@ -98,7 +107,7 @@ public class PasswordGeneratorUI extends Application {
         //Vbox for all the toggles to live in
         VBox toggleVBox = new VBox(10);
         toggleVBox.setAlignment(Pos.CENTER);
-        toggleVBox.getChildren().addAll(numbersRow, specialCharsRow, leetSpeakRow, capitalRow, pinRow);
+        toggleVBox.getChildren().addAll(lengthRow, numbersRow, specialCharsRow, leetSpeakRow, capitalRow, pinRow);
 
         // Button to Generate a Password
         Button generateButton = new Button("Generate");
@@ -106,6 +115,7 @@ public class PasswordGeneratorUI extends Application {
         generateButton.setOnAction(e -> {
 
             PasswordGenerator generator = new PasswordGenerator(dictionary);
+            config.setMinLength(Integer.parseInt(lengthField.getText()));
             config.setIncludeNumbers(numbersToggle.isSwitchedOn());
             config.setIncludeSpecialChars(specialCharsToggle.isSwitchedOn());
             config.setLettersToNumbers(leetSpeakToggle.isSwitchedOn());
@@ -137,5 +147,6 @@ public class PasswordGeneratorUI extends Application {
         // Basic Code to Show the window
         primaryStage.setScene(scene);
         primaryStage.show();
+        root.requestFocus(); // Takes focus away from the TextField
     }
 }
