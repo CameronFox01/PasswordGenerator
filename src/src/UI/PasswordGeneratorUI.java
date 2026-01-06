@@ -57,6 +57,22 @@ public class PasswordGeneratorUI extends Application {
         ToggleSwitch leetSpeakToggle = new ToggleSwitch();
         leetSpeakRow.getChildren().addAll(leetSpeakLabel, leetSpeakToggle);
 
+        HBox capitalRow = new HBox(10);
+        Label capitalLabel = new Label("Use Capital Letters:");
+        ToggleSwitch capitalToggle = new ToggleSwitch();
+        capitalToggle.setSwitchedOn(true);
+        capitalRow.getChildren().addAll(capitalLabel, capitalToggle);
+
+        HBox pinRow = new HBox(10);
+        Label pinLabel = new Label("Create a Pin:");
+        ToggleSwitch pinToggle = new ToggleSwitch();
+        pinToggle.setSwitchedOn(false);
+        pinRow.getChildren().addAll(pinLabel, pinToggle);
+
+        VBox toggleVBox = new VBox(10);
+        toggleVBox.setAlignment(Pos.CENTER);
+        toggleVBox.getChildren().addAll(numbersRow, specialCharsRow, leetSpeakRow, capitalRow, pinRow);
+
 
         // Button to Generate a Password
         Button generateButton = new Button("Generate");
@@ -67,15 +83,21 @@ public class PasswordGeneratorUI extends Application {
             config.setIncludeNumbers(numbersToggle.isSwitchedOn());
             config.setIncludeSpecialChars(specialCharsToggle.isSwitchedOn());
             config.setLettersToNumbers(leetSpeakToggle.isSwitchedOn());
-
-            String password = generator.generate(config);
+            config.setMakePinPassword(pinToggle.isSwitchedOn());
+            boolean createPin = pinToggle.isSwitchedOn();
+            String password;
+            if (createPin) {
+                password = generator.pinGenerate(config);
+            } else {
+                password = generator.generate(config);
+            }
             System.out.println(password);
         });
 
         VBox root = new VBox();
         root.setAlignment(Pos.CENTER);
         root.setSpacing(10);
-        root.getChildren().addAll(title, numbersRow, specialCharsRow, leetSpeakRow, generateButton);
+        root.getChildren().addAll(title, toggleVBox, generateButton);
 
         Scene scene = new Scene(root);
         Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
