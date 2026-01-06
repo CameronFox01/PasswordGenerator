@@ -27,7 +27,7 @@ public class PasswordGeneratorUI extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         // Initialize Dictionary
         String filePath = "src/resources/words_alpha.txt";
         WordDictionary dictionary = CreateDictionary.createWordDictionary(filePath);
