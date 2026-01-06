@@ -69,10 +69,36 @@ public class PasswordGeneratorUI extends Application {
         pinToggle.setSwitchedOn(false);
         pinRow.getChildren().addAll(pinLabel, pinToggle);
 
+        // Listen for PIN toggle changes
+        pinToggle.switchedOnProperty().addListener((obs, oldVal, newVal) -> {
+            boolean isPinMode = newVal;
+
+            if (isPinMode) {
+                // Disable and turn off other toggles when PIN mode is on
+                numbersToggle.setSwitchedOn(false);
+                numbersToggle.setDisable(true);
+
+                specialCharsToggle.setSwitchedOn(false);
+                specialCharsToggle.setDisable(true);
+
+                leetSpeakToggle.setSwitchedOn(false);
+                leetSpeakToggle.setDisable(true);
+
+                capitalToggle.setSwitchedOn(false);
+                capitalToggle.setDisable(true);
+            } else {
+                // Re-enable toggles when PIN mode is off
+                numbersToggle.setDisable(false);
+                specialCharsToggle.setDisable(false);
+                leetSpeakToggle.setDisable(false);
+                capitalToggle.setDisable(false);
+            }
+        });
+
+        //Vbox for all the toggles to live in
         VBox toggleVBox = new VBox(10);
         toggleVBox.setAlignment(Pos.CENTER);
         toggleVBox.getChildren().addAll(numbersRow, specialCharsRow, leetSpeakRow, capitalRow, pinRow);
-
 
         // Button to Generate a Password
         Button generateButton = new Button("Generate");
