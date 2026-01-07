@@ -109,6 +109,40 @@ public class PasswordGeneratorUI extends Application {
         toggleVBox.setAlignment(Pos.CENTER);
         toggleVBox.getChildren().addAll(lengthRow, numbersRow, specialCharsRow, leetSpeakRow, capitalRow, pinRow);
 
+        // Section to display generated password
+        HBox passwordDisplayRow = new HBox(10);
+        passwordDisplayRow.setAlignment(Pos.CENTER);
+
+        Label passwordResultLabel = new Label("Generated Password:");
+        TextField passwordDisplay = new TextField();
+        passwordDisplay.setEditable(false); // User can't edit it
+        passwordDisplay.setPrefWidth(300);
+        passwordDisplay.setPromptText("Click Generate to create a password");
+
+        Button copyButton = new Button("Copy");
+        copyButton.setDisable(true); // Disabled until password is generated
+
+// Copy button action
+        copyButton.setOnAction(e -> {
+            String password = passwordDisplay.getText();
+            if (!password.isEmpty()) {
+                // Copy to clipboard
+                javafx.scene.input.Clipboard clipboard = javafx.scene.input.Clipboard.getSystemClipboard();
+                javafx.scene.input.ClipboardContent content = new javafx.scene.input.ClipboardContent();
+                content.putString(password);
+                clipboard.setContent(content);
+
+                // Optional: Give visual feedback
+                copyButton.setText("Copied!");
+                // Reset button text after 2 seconds
+                javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(javafx.util.Duration.seconds(2));
+                pause.setOnFinished(event -> copyButton.setText("Copy"));
+                pause.play();
+            }
+        });
+
+        passwordDisplayRow.getChildren().addAll(passwordResultLabel, passwordDisplay, copyButton);
+
         // Button to Generate a Password
         Button generateButton = new Button("Generate");
         generateButton.setStyle("-fx-font-size: 40px;");
@@ -127,13 +161,16 @@ public class PasswordGeneratorUI extends Application {
             } else {
                 password = generator.generate(config);
             }
+            // Display the password and enable copy button
+            passwordDisplay.setText(password);
+            copyButton.setDisable(false);
             System.out.println(password);
         });
 
         VBox root = new VBox();
         root.setAlignment(Pos.CENTER);
         root.setSpacing(10);
-        root.getChildren().addAll(title, toggleVBox, generateButton);
+        root.getChildren().addAll(title, toggleVBox,passwordDisplayRow, generateButton);
 
         Scene scene = new Scene(root);
         Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
