@@ -50,8 +50,14 @@ public class PasswordGenerator {
     public String pinGenerate(PasswordConfig config) {
         StringBuilder pin = new StringBuilder();
         int i = config.getMinLength();
+        System.out.println("i: " + i);
         while (pin.length() < i) {
             pin.append(generateRandomNumber());
+            System.out.println(pin.toString());
+        }
+        if(pin.length() > i){
+            pin.setLength(i);
+            System.out.println(pin.toString());
         }
         return pin.toString();
     }
