@@ -18,33 +18,86 @@ public class PasswordGenerator {
         StringBuilder password = new StringBuilder();
 
         // Start with a random word
-        password.append(dictionary.getRandomWord());
-
-        // Add numbers if needed
-        if (config.isIncludeNumbers()) {
-            password.append(generateRandomNumber());
-        }
-
-        // Add special character if needed
-        if (config.isIncludeSpecialChars()) {
-            password.append(generateRandomSpecialChar());
-        }
-
-        // Ensure minimum length by adding more words
-        while (password.length() < config.getMinLength()) {
+        if(config.isCompletelyRandom()){
+            // Generate completely random alphanumeric password
+            password.append(generateCompletelyRandom(config.getMinLength(),
+                    config.isIncludeSpecialChars()));
+        } else {
             password.append(dictionary.getRandomWord());
-        }
+            // Add numbers if needed
+            if (config.isIncludeNumbers()) {
+                password.append(generateRandomNumber());
+            }
 
-        // Future: Apply l33t speak transformation
-        if (config.isLettersToNumbers()) {
-            password = applyLeetSpeak(password.toString());
-        }
+            // Add special character if needed
+            if (config.isIncludeSpecialChars()) {
+                password.append(generateRandomSpecialChar());
+            }
 
-        if (config.isIncludeCapitalLetter()){
-            password = makeLetterCapital(password.toString());
-        }
+            // Ensure minimum length by adding more words
+            while (password.length() < config.getMinLength()) {
+                password.append(dictionary.getRandomWord());
+            }
 
+            // Future: Apply l33t speak transformation
+            if (config.isLettersToNumbers()) {
+                password = applyLeetSpeak(password.toString());
+            }
+
+            if (config.isIncludeCapitalLetter()) {
+                password = makeLetterCapital(password.toString());
+            }
+        }
         return password.toString();
+    }
+
+    // Add this new method to your PasswordGenerator class:
+    private String generateCompletelyRandom(int length, boolean includeSpecialChars) {
+        StringBuilder result = new StringBuilder();
+
+        // Define character sets
+        String lowercase = "abcdefghijklmnopqrstuvwxyz";
+        String uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String digits = "0123456789";
+        String specialChars = "!@#$%&*+-=?";
+
+        // Combine all allowed characters
+        String allChars = lowercase + uppercase + digits;
+        if (includeSpecialChars) {
+            allChars += specialChars;
+        }
+        // Ensure at least one of each type is included
+        result.append(lowercase.charAt(random.nextInt(lowercase.length())));
+        result.append(uppercase.charAt(random.nextInt(uppercase.length())));
+        result.append(digits.charAt(random.nextInt(digits.length())));
+
+        if (includeSpecialChars) {
+            result.append(specialChars.charAt(random.nextInt(specialChars.length())));
+        }
+
+        // Fill the rest randomly
+        while (result.length() < length) {
+            result.append(allChars.charAt(random.nextInt(allChars.length())));
+        }
+
+        // Shuffle the string so guaranteed characters aren't always at the start
+        return shuffleString(result.toString());
+    }
+
+    // Helper method to shuffle a string
+    private String shuffleString(String input) {
+        char[] characters = input.toCharArray();
+
+        // Fisher-Yates shuffle
+        for (int i = characters.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            // Swap
+            char temp = characters[i];
+            characters[i] = characters[j];
+            characters[j] = temp;
+        }
+
+        return new String(characters);
     }
 
     public String pinGenerate(PasswordConfig config) {

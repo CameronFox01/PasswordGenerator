@@ -8,6 +8,7 @@ public class PasswordConfig {
     private boolean lettersToNumbers; // future: l33t speak
     private boolean makePinPassword;
     private boolean includeCapitalLetter;
+    private boolean completelyRandom;
 
     public PasswordConfig() {
         // Defaults
@@ -17,6 +18,7 @@ public class PasswordConfig {
         this.lettersToNumbers = false;
         this.makePinPassword = false;
         this.includeCapitalLetter = true;
+        this.completelyRandom = false;
     }
 
     // Getters and setters
@@ -37,4 +39,7 @@ public class PasswordConfig {
 
     public boolean isIncludeCapitalLetter() { return includeCapitalLetter; }
     public void setIncludeCapitalLetter(boolean includeCapitalLetter) {this.includeCapitalLetter = includeCapitalLetter;}
+
+    public boolean isCompletelyRandom() { return completelyRandom; }
+    public void setCompletelyRandom(boolean completelyRandom) { this.completelyRandom = completelyRandom; }
 }

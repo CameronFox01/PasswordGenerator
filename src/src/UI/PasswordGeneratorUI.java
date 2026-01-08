@@ -72,6 +72,12 @@ public class PasswordGeneratorUI extends Application {
         capitalToggle.setSwitchedOn(true);
         capitalRow.getChildren().addAll(capitalLabel, capitalToggle);
 
+        HBox randomRow = new HBox(10);
+        Label randomLabel = new Label("Randomize:");
+        ToggleSwitch randomToggle = new ToggleSwitch();
+        randomToggle.setSwitchedOn(false);
+        randomRow.getChildren().addAll(randomLabel, randomToggle);
+
         HBox pinRow = new HBox(10);
         Label pinLabel = new Label("Create a Pin:");
         ToggleSwitch pinToggle = new ToggleSwitch();
@@ -95,19 +101,23 @@ public class PasswordGeneratorUI extends Application {
 
                 capitalToggle.setSwitchedOn(false);
                 capitalToggle.setDisable(true);
+
+                randomToggle.setSwitchedOn(false);
+                randomToggle.setDisable(true);
             } else {
                 // Re-enable toggles when PIN mode is off
                 numbersToggle.setDisable(false);
                 specialCharsToggle.setDisable(false);
                 leetSpeakToggle.setDisable(false);
                 capitalToggle.setDisable(false);
+                randomToggle.setDisable(false);
             }
         });
 
         //Vbox for all the toggles to live in
         VBox toggleVBox = new VBox(10);
         toggleVBox.setAlignment(Pos.CENTER);
-        toggleVBox.getChildren().addAll(lengthRow, numbersRow, specialCharsRow, leetSpeakRow, capitalRow, pinRow);
+        toggleVBox.getChildren().addAll(lengthRow, numbersRow, specialCharsRow, leetSpeakRow, capitalRow, randomRow, pinRow);
 
         // Section to display generated password
         HBox passwordDisplayRow = new HBox(10);
@@ -153,6 +163,7 @@ public class PasswordGeneratorUI extends Application {
             config.setIncludeNumbers(numbersToggle.isSwitchedOn());
             config.setIncludeSpecialChars(specialCharsToggle.isSwitchedOn());
             config.setLettersToNumbers(leetSpeakToggle.isSwitchedOn());
+            config.setCompletelyRandom(randomToggle.isSwitchedOn());
             config.setMakePinPassword(pinToggle.isSwitchedOn());
             boolean createPin = pinToggle.isSwitchedOn();
             String password;
