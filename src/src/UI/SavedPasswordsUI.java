@@ -10,6 +10,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.beans.EventHandler;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class SavedPasswordsUI extends Application {
     @Override
@@ -35,7 +38,29 @@ public class SavedPasswordsUI extends Application {
 
         Button save = new Button("Save");
         save.setOnAction(e-> {
-            System.out.println("Print");
+            // TODO: I doubt this is how I want to do this for the finish project.
+            //  Probably want to code it to be a map data structure so searching is
+            //  is easy. This works for mean time testing.
+            // Defining the file name of the file
+            Path fileName = Path.of("src/src/SavedPasswords.txt");
+
+            //Grabbing information to write.
+            StringBuilder text = new StringBuilder();
+            text.append("\n" + titleField.getText() + "\n");
+            text.append(usernameField.getText() + "\n");
+            text.append(passwordField1.getText() + "\n");
+
+            try {
+                Files.writeString(fileName, text);
+
+                // Reading the content of the file
+                String fileContent = Files.readString(fileName);
+
+                // Printing the content inside the file
+                System.out.println(fileContent);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         VBox root = new VBox(10);
